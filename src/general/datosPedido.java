@@ -17,6 +17,7 @@ public String idField ="";
     }
     
     public void limpiar(){
+        idField ="";
         fechaField.setText("");
         nombreField.setText("");
         telefonoField.setText("");

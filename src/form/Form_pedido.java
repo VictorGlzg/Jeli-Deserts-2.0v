@@ -16,6 +16,7 @@ import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import main.Conexion;
+import main.FramePedidos;
 import main.Validar;
 import swing.ScrollBar;
 
@@ -52,6 +53,7 @@ public class Form_pedido extends javax.swing.JPanel {
         cleanbutton = new swing.MyButton();
         modbutton = new swing.MyButton();
         datosPedido1 = new general.datosPedido();
+        framePedidosbutton = new swing.MyButton();
 
         setBackground(new java.awt.Color(245, 243, 243));
         setForeground(new java.awt.Color(245, 243, 243));
@@ -166,14 +168,24 @@ public class Form_pedido extends javax.swing.JPanel {
             }
         });
 
+        framePedidosbutton.setBorder(null);
+        framePedidosbutton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/clean.png"))); // NOI18N
+        framePedidosbutton.setToolTipText("Abrir pedidos");
+        framePedidosbutton.setRadius(65);
+        framePedidosbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                framePedidosbuttonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelBorderModify1Layout = new javax.swing.GroupLayout(panelBorderModify1);
         panelBorderModify1.setLayout(panelBorderModify1Layout);
         panelBorderModify1Layout.setHorizontalGroup(
             panelBorderModify1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBorderModify1Layout.createSequentialGroup()
-                .addGap(36, 36, 36)
+                .addContainerGap()
                 .addComponent(datosPedido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panelBorderModify1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelBorderModify1Layout.createSequentialGroup()
                         .addComponent(addbutton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -184,22 +196,29 @@ public class Form_pedido extends javax.swing.JPanel {
                         .addComponent(cleanbutton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(modbutton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(framePedidosbutton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelBorderModify1Layout.setVerticalGroup(
             panelBorderModify1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBorderModify1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panelBorderModify1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(panelBorderModify1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panelBorderModify1Layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(panelBorderModify1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(trashbutton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(addbutton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(panelBorderModify1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cleanbutton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(modbutton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(datosPedido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelBorderModify1Layout.createSequentialGroup()
+                                .addGroup(panelBorderModify1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(trashbutton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(addbutton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(panelBorderModify1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(cleanbutton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(modbutton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(datosPedido1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(panelBorderModify1Layout.createSequentialGroup()
+                        .addGap(82, 82, 82)
+                        .addComponent(framePedidosbutton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(58, Short.MAX_VALUE))
         );
 
@@ -262,26 +281,6 @@ public class Form_pedido extends javax.swing.JPanel {
             actualizar();
         }
         
-    }
-    
-    public void Eliminar_cliente(){
-        
-        /*PreparedStatement ps = null;
-                try {
-                    Conexion objCon = new Conexion();
-                    Connection conn = objCon.getConexion();
-                    String id = datosPedido1.idField;
-                    String sql = "SELECT Baja_Cliente('" + id + "')";
-                    System.out.println(sql);
-                    ps = conn.prepareStatement(sql);
-                    ps.execute();
-                    JOptionPane.showMessageDialog(null, "El cliente fue eliminado correctamente.");
-                    datosCliente1.limpiar();
-                    actualizar();
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Error al Eliminar al empleado.");
-                    System.out.println(ex.toString());
-                    }*/
     }
     
     private void modificar(){
@@ -361,20 +360,19 @@ public class Form_pedido extends javax.swing.JPanel {
 
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
-
+            
             while (rs.next()) {
-                id = rs.getString("id");
+                ID = rs.getString("id");
                 fecha2 = rs.getString("cumpleA");
-                nom_client=rs.getString("nom_client");
+                nombre=rs.getString("nom_client");
                 tel_client=rs.getString("tel_client");
-                idPED = rs.getString("id");
+                IDCLIENT = rs.getString("id_client");
                 fecha = rs.getString("fecha");
-                idclient = rs.getString("id_client");
             }
         } catch (SQLException ex) {
             System.out.println(ex.toString());
         }
-        datosPedido1.llenarDatos(id,nom_client,fecha,tel_client,fecha2);
+        datosPedido1.llenarDatos(IDCLIENT,nombre,fecha,tel_client,fecha2);
         datosPedido1.cumpleField.setForeground(new Color(0,0,0));
     }//GEN-LAST:event_tableMouseClicked
 
@@ -446,12 +444,24 @@ public class Form_pedido extends javax.swing.JPanel {
             JOptionPane.showMessageDialog(this, "No ha seleccionado ningun pedido de la lista.");
         }
     }//GEN-LAST:event_trashbuttonActionPerformed
+
+    private void framePedidosbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_framePedidosbuttonActionPerformed
+    if(ID.equals("")){
+        JOptionPane.showMessageDialog(this, "No se ha ingresado ningún pedido a checar.");
+    }else{
+        FramePedidos fp = new FramePedidos();
+        fp.obtenerID(ID,nombre,IDCLIENT);
+        //fp.iniciar();
+        fp.show();}
+    }//GEN-LAST:event_framePedidosbuttonActionPerformed
+    
     String ID="",IDCLIENT,nombre, date;
     Validar v = new Validar();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private swing.MyButton addbutton;
     private swing.MyButton cleanbutton;
     private general.datosPedido datosPedido1;
+    private swing.MyButton framePedidosbutton;
     private javax.swing.JLabel lbValues1;
     private swing.MyButton modbutton;
     private swing.PanelBorder panelBorder1;
