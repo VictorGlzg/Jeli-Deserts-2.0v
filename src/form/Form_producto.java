@@ -71,7 +71,7 @@ public class Form_producto extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "Tipo", "Costo", "Sabor"
+                "ID", "Tipo", "Sabor", "Costo"
             }
         ) {
             boolean[] canEdit = new boolean [] {

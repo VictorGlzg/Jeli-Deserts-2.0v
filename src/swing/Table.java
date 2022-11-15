@@ -100,8 +100,8 @@ public class Table extends JTable {
             int cantidadColumnas = rsMd.getColumnCount();
             model.addColumn("ID");
             model.addColumn("Tipo");
-            model.addColumn("Costo");
             model.addColumn("Sabor");
+            model.addColumn("Costo");
             
             this.getColumnModel().getColumn(0).setMaxWidth(50);
             

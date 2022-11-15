@@ -110,6 +110,7 @@ ImageIcon logo = new ImageIcon(".\\src\\icons\\jeliHD.png");
         mainPanel.setLayout(new java.awt.BorderLayout());
 
         minButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/encogimiento (1).png"))); // NOI18N
+        minButton.setToolTipText("minimizar");
         minButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 minButtonMouseClicked(evt);

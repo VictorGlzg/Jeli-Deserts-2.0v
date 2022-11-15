@@ -392,7 +392,7 @@ SELECT Mod_id_prod(99,0);
 DELIMITER // 
 CREATE PROCEDURE Mostrar_Productos()  
 BEGIN 
-SELECT * FROM Productos where NOT ( Productos.id = 0);
+SELECT id,tipo,sabor,costo FROM Productos where NOT ( Productos.id = 0);
 END // DELIMITER ; 
 -- drop procedure Mostrar_Productos;
 -- call Mostrar_Producto();
@@ -414,7 +414,7 @@ CREATE PROCEDURE Mostrar_ProductoID(idp int)
 BEGIN
 declare message varchar(20);
 if (exists(select id from Productos where id like idp)) then
-	select * from Productos where id = idp; -- IMPORTANTE
+	select id,tipo,sabor,costo from Productos where id = idp; -- IMPORTANTE
 else
 	set message = 'Producto no encontrado';
 end if;
@@ -422,7 +422,7 @@ END // DELIMITER ;
 
 -- drop procedure Mostrar_Producto;
 -- drop procedure Mostrar_Productos;
--- call Mostrar_Producto('Flan');
+-- call Mostrar_ProductoID(100);
 
 -- Tabla de detalle
 delimiter //
@@ -467,7 +467,7 @@ BEGIN
 declare message varchar(50);
 	if(exists(select detalle_ped_prod.ped_id from detalle_ped_prod where
     detalle_ped_prod.ped_id like idped))then
-		select id_detpp, cantidad, Productos.tipo, Productos.sabor, adit, Productos.costo
+		select id_detpp, Productos.tipo, Productos.sabor, cantidad, adit, Productos.costo
 		from detalle_ped_prod join Productos
 		on detalle_ped_prod.prod_id=Productos.id where detalle_ped_prod.ped_id like
         idped;
@@ -536,7 +536,7 @@ return message;
 END // delimiter ;
 
 -- CALCULOS ESTADISTICOS
-DELIMITER // 
+/*DELIMITER // 
 CREATE PROCEDURE dineroGanadoxMes(idpedido int,  mes date)
 BEGIN
 declare message varchar(50);
@@ -545,9 +545,9 @@ if (exists(select id from Pedido where id like idpedido)) then
 else
 	set message = 'Pedido no encontrado';
 end if;
-END // DELIMITER ;
+END // DELIMITER ;*/
 --  select avg();
-call dineroGanadoxMes();
+-- call dineroGanadoxMes();
 -- drop PROCEDURE dineroGanadoxMes();
 
 select * from Pedido join Cliente on Pedido.id_client=Cliente.id_client where month(fecha)=4;

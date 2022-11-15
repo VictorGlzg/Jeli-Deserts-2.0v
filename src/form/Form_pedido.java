@@ -450,7 +450,7 @@ public class Form_pedido extends javax.swing.JPanel {
     }else{
          fp = new FramePedidos();
         fp.obtenerID(ID,nombre,IDCLIENT);
-        //fp.iniciar();
+        fp.iniciar();
         fp.show();}
     }//GEN-LAST:event_framePedidosbuttonActionPerformed
     FramePedidos fp;
