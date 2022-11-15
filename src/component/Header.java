@@ -32,6 +32,9 @@ public int index;
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 searchText1KeyReleased(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                searchText1KeyTyped(evt);
+            }
         });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -69,6 +72,12 @@ public int index;
     }
     
     }//GEN-LAST:event_searchText1KeyReleased
+
+    private void searchText1KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_searchText1KeyTyped
+    if(searchText1.getText().length()>=100){
+        evt.consume();
+        }
+    }//GEN-LAST:event_searchText1KeyTyped
     
     @Override
     protected void paintComponent(Graphics grphcs) {

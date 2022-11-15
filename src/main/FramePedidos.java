@@ -1,17 +1,25 @@
 package main;
 
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 
 public class FramePedidos extends javax.swing.JFrame {
 
     public FramePedidos() {
         initComponents();
         setBackground(new Color(0,0,0,0));
+        initMoving(this);
+        setTitle("Apartado de pedidos de los clientes");
+        setIconImage(logo.getImage());
+        setLocationRelativeTo(null); //Centraliza la pantalla 
     }
 
     @SuppressWarnings("unchecked")
@@ -19,23 +27,65 @@ public class FramePedidos extends javax.swing.JFrame {
     private void initComponents() {
 
         panelBorder1 = new swing.PanelBorder();
+        panelMoving = new javax.swing.JPanel();
+        exitButton = new javax.swing.JButton();
+        minimizebutton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
         setPreferredSize(new java.awt.Dimension(600, 650));
         setResizable(false);
 
-        panelBorder1.setForeground(new java.awt.Color(255, 255, 255));
+        panelBorder1.setForeground(new java.awt.Color(240, 240, 240));
+
+        panelMoving.setBackground(new java.awt.Color(255, 255, 255));
+
+        exitButton.setText("jButton1");
+        exitButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitButtonActionPerformed(evt);
+            }
+        });
+
+        minimizebutton.setText("jButton2");
+        minimizebutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                minimizebuttonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelMovingLayout = new javax.swing.GroupLayout(panelMoving);
+        panelMoving.setLayout(panelMovingLayout);
+        panelMovingLayout.setHorizontalGroup(
+            panelMovingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelMovingLayout.createSequentialGroup()
+                .addContainerGap(455, Short.MAX_VALUE)
+                .addComponent(minimizebutton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(exitButton)
+                .addContainerGap())
+        );
+        panelMovingLayout.setVerticalGroup(
+            panelMovingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelMovingLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panelMovingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(exitButton)
+                    .addComponent(minimizebutton))
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout panelBorder1Layout = new javax.swing.GroupLayout(panelBorder1);
         panelBorder1.setLayout(panelBorder1Layout);
         panelBorder1Layout.setHorizontalGroup(
             panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 621, Short.MAX_VALUE)
+            .addComponent(panelMoving, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         panelBorder1Layout.setVerticalGroup(
             panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 672, Short.MAX_VALUE)
+            .addGroup(panelBorder1Layout.createSequentialGroup()
+                .addComponent(panelMoving, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 620, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -53,6 +103,14 @@ public class FramePedidos extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void exitButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitButtonActionPerformed
+    this.dispose();
+    }//GEN-LAST:event_exitButtonActionPerformed
+
+    private void minimizebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_minimizebuttonActionPerformed
+    this.setState(this.ICONIFIED);
+    }//GEN-LAST:event_minimizebuttonActionPerformed
+
     public static void main(String args[]) {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -63,6 +121,7 @@ public class FramePedidos extends javax.swing.JFrame {
     }
     
     public void iniciar(){
+        
         /*initComponents();
         setIconImage(logo.getImage());
         tablaProd();
@@ -104,6 +163,26 @@ public class FramePedidos extends javax.swing.JFrame {
         }*/
     }
     
+     private int x;
+    private int y;
+    //Permite guardar las coordenadas del mouse en x, y para al presionar poder desplazar el frame completo por la pantalla.
+    public void initMoving(JFrame fram) {
+        panelMoving.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent me) {
+                x = me.getX();
+                y = me.getY();
+            }
+
+        });
+        panelMoving.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent me) {
+                fram.setLocation(me.getXOnScreen() - x, me.getYOnScreen() - y);
+            }
+        });
+    }
+    
     public void obtenerID(String i, String n, String nC){
     ID = i;
     nom = n;
@@ -112,6 +191,9 @@ public class FramePedidos extends javax.swing.JFrame {
     ImageIcon logo = new ImageIcon(".\\src\\icons\\jeliHD.png");
     String ID,nom, date, nomClient;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton exitButton;
+    private javax.swing.JButton minimizebutton;
     private swing.PanelBorder panelBorder1;
+    private javax.swing.JPanel panelMoving;
     // End of variables declaration//GEN-END:variables
 }
