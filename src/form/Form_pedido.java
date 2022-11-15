@@ -448,7 +448,7 @@ public class Form_pedido extends javax.swing.JPanel {
     if(ID.equals("")){
         JOptionPane.showMessageDialog(this, "No se ha ingresado ningún pedido a checar.");
     }else{
-         fp = new FramePedidos();
+        fp = new FramePedidos();
         fp.obtenerID(ID,nombre,IDCLIENT);
         fp.iniciar();
         fp.show();}

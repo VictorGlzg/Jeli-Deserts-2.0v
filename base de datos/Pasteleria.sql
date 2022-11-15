@@ -494,13 +494,13 @@ end // delimiter ;
 -- Modificaciones
 
 delimiter //
-create function Mod_cant_detpp(id_det int,cant int) returns varchar(50)
+create function Mod_detalle(id_det int,cant int, newaditivo varchar(100),id_prod int) returns varchar(50)
 READS SQL DATA 
 DETERMINISTIC 
 BEGIN
 declare message varchar(50);
 	if (exists(select id_detpp from detalle_ped_prod where id_detpp like id_det)) then
-		update detalle_ped_prod set cantidad = cant where id_detpp=id_det;
+		update detalle_ped_prod set cantidad = cant,adit = newaditivo, prod_id = id_prod where id_detpp=id_det;
 		set message = 'Modificación realizada';
 	end if;
 return message;	

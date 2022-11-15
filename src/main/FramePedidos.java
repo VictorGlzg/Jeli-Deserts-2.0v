@@ -83,7 +83,7 @@ public class FramePedidos extends javax.swing.JFrame {
         setResizable(false);
 
         panelBorder1.setBackground(new java.awt.Color(255, 255, 255));
-        panelBorder1.setForeground(new java.awt.Color(229, 229, 229));
+        panelBorder1.setForeground(new java.awt.Color(227, 227, 227));
 
         minButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/encogimiento (1).png"))); // NOI18N
         minButton.setToolTipText("minimizar");
@@ -443,11 +443,12 @@ public class FramePedidos extends javax.swing.JFrame {
     }//GEN-LAST:event_modbuttonActionPerformed
 
     private void factbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_factbuttonActionPerformed
-            facturar();
+        f.cargarDatos(ID_pedido);  
+        f.generarFactura();
     }//GEN-LAST:event_factbuttonActionPerformed
 
     private void cumplebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cumplebuttonActionPerformed
-        // TODO add your handling code here:
+        validarCumple();
     }//GEN-LAST:event_cumplebuttonActionPerformed
 
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
@@ -467,8 +468,9 @@ public class FramePedidos extends javax.swing.JFrame {
 
             while (rs.next()) {
                 ID_detalle = rs.getString("id_detpp");
+                ID_prod = rs.getString("Productos.id");
                 tinydatosProducto1.cantidadField.setText(rs.getString("cantidad"));
-                tinydatosProducto1.aditivoField.setText(rs.getString("adit"));
+                tinydatosProducto1.aditivoField.setText(rs.getString("adit"));                
                 tinydatosProducto1.tipoField.setText(rs.getString("Productos.tipo"));
             }
         } catch (SQLException ex) {
@@ -479,6 +481,40 @@ public class FramePedidos extends javax.swing.JFrame {
     private void tableProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableProductosMouseClicked
     actualizarProductos();
     }//GEN-LAST:event_tableProductosMouseClicked
+    
+    private void validarCumple(){
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        date = new SimpleDateFormat("MM-dd").format(Calendar.getInstance().getTime());
+        
+        String cumpleaños="";
+            try {
+                Conexion objCon = new Conexion();
+                Connection conn = objCon.getConexion();
+                String sql = "CALL Mostrar_ClienteID("+ nomClient +")"; //cambiar ID
+                
+                ps = conn.prepareStatement(sql);
+                rs = ps.executeQuery();
+                if(rs.next()){
+                cumpleaños = (rs.getString("cumpleA"));
+                cumpleaños = v.formatoFecha(cumpleaños);
+                }
+                if(cumpleaños.equals(date)){
+                    sql = "SELECT Alta_Detalle("+ ID_pedido + ", 0 , 1 ,'')";
+                    ps = conn.prepareStatement(sql);
+                    ps.execute();
+                    JOptionPane.showMessageDialog(this, "El cupón se ha aplicado.");
+                    actualizar();
+                    tinydatosProducto1.limpiar();
+                    }
+                else{
+                    JOptionPane.showMessageDialog(this, "Error cumpleaños no registrado el día de hoy.");
+                }
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error al modificar el producto.");
+                System.out.println(ex);
+            }
+    }
     
     private void actualizarProductos(){
         PreparedStatement ps = null;
@@ -590,43 +626,27 @@ public class FramePedidos extends javax.swing.JFrame {
     }
     
     private void modificar(){
-        /*table.setRowSorter(null);
+        table.setRowSorter(null);
         PreparedStatement ps = null;
-        String id = "",cantidad = "", aditivo = "",producto = "";
+        String id = "",cant = "", adit = "",tipo = "";
             try {
                 Conexion objCon = new Conexion();
                 Connection conn = objCon.getConexion();
-                id = jTextField1.getText();
-                cantidad = jTextField3.getText();
-                aditivo = jTextField6.getText();
-                producto = jTextField2.getText();
-                if(Fproducto){
-                String sql = "SELECT Mod_prod_detpp("+ id +"," + producto + ")";
+                id = ID_detalle;
+                tipo = ID_prod;
+                cant = tinydatosProducto1.cantidadField.getText();
+                adit = tinydatosProducto1.aditivoField.getText();
+                //Mod_detalle(id_det int,cant int, newaditivo varchar(100),id_prod int)
+                String sql = "SELECT Mod_detalle("+ id +"," + cant + ",'"+adit+"',"+tipo+")";
                 ps = conn.prepareStatement(sql);
                 ps.execute();
-                }
-                if(Fcantidad){
-                String sql = "SELECT Mod_cant_detpp("+ id +"," + cantidad + ")";
-                ps = conn.prepareStatement(sql);
-                ps.execute();
-                }
-                if(Faditivo){
-                String sql = "SELECT Mod_adit_detpp("+ id +",'" + aditivo + "')";
-                ps = conn.prepareStatement(sql);
-                ps.execute();
-                }
-                if(!Fproducto&&!Fcantidad&&!Faditivo)
-                    JOptionPane.showMessageDialog(this, "No se ha selecionado ningún campo a modificar.");
-                else{
                     JOptionPane.showMessageDialog(this, "Producto se ha modificado con exito.");
-                    limpiar();
+                    tinydatosProducto1.limpiar();
                     actualizar();
-                }
-                
-            } catch (SQLException ex) {
+                } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(this, "Error al modificar el producto.");
                 System.out.println(ex);
-            }*/
+            }
     }
     
     public void Eliminar_pedido(){
@@ -650,166 +670,7 @@ public class FramePedidos extends javax.swing.JFrame {
             System.out.println(ex.toString());
         }
     }
-    
-    private void facturar(){  
-    /*date = new SimpleDateFormat("dd MMMM yyyy").format(Calendar.getInstance().getTime());
-    String nombre="", direccion="", telefono="", correo="", rzSocial = "";
-    float pagoTotal=0, total=0;
-    rzSocial = JOptionPane.showInputDialog("Escriba la Razón Social:");
-    try{
-    String ruta = System.getProperty("user.home");
-    PdfWriter pdW = new PdfWriter(ruta + "/Downloads/Factura"+ID+".pdf");
-    PdfDocument pdfDoc = new PdfDocument(pdW);
-    pdfDoc.setDefaultPageSize(PageSize.A4);
-    Document doc = new Document(pdfDoc);
-    
-    try {
-            PreparedStatement ps = null;
-            ResultSet rs = null;
-            Conexion objCon = new Conexion();
-            Connection conn = objCon.getConexion();
-            int id = Integer.parseInt(ID);
-            String sql = "CALL Mostrar_Pedido(" + id + ")";
-
-            ps = conn.prepareStatement(sql);
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                nombre = rs.getString("Cliente.nom_client");
-                direccion = rs.getString("Cliente.dir_client");
-                telefono = rs.getString("Cliente.tel_client");
-                correo = rs.getString("Cliente.correo");
-            }
-            objCon.Cerrar_Conexion();
-            conn.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this,"Se ha generado un error en la consulta de datos.");
-            System.out.println(ex);
-        }
-    float threecol = 190f;
-    float twocol = 285f;
-    float twocol150=twocol+150f;
-    float twocolumnWidth[]={twocol150,twocol};
-    float fullwidth[]={3*threecol};
-    Table table = new Table(twocolumnWidth);
-    
-    Cell empresa = new Cell();
-    empresa.add("Jeli Deserts");
-    empresa.setBorder(Border.NO_BORDER);
-    empresa.setFontSize(18);
-    empresa.setBold();
-    table.addCell(empresa);
-    
-    Table datos = new Table(new float[]{twocol/2,twocol/2});
-    datos.addCell(new Cell().add("Nombre: ").setBold());
-    datos.addCell(new Cell().add(nombre));
-    datos.addCell(new Cell().add("Dirección: ").setBold());
-    datos.addCell(new Cell().add(direccion));
-    datos.addCell(new Cell().add("Teléfono: ").setBold());
-    datos.addCell(new Cell().add(telefono));
-    datos.addCell(new Cell().add("Correo electrónico: ").setBold());
-    datos.addCell(new Cell().add(correo));
-    
-    Table datosEmp = new Table(1);
-    datosEmp.addCell(new Cell().add("Emiliano Zapata Col. Obrera").setBold().setBorder(Border.NO_BORDER));
-    datosEmp.addCell(new Cell().add("Tampico, Tamaulipas. C.P 89050").setBold().setBorder(Border.NO_BORDER));
-    datosEmp.addCell(new Cell().add("Teléfono: 8334417038").setBold().setBorder(Border.NO_BORDER));
-    
-    Table pedido = new Table(new float[]{twocol/2,twocol/2});
-    pedido.addCell(new Cell().add("Pedido No.").setBold());
-    pedido.addCell(new Cell().add(ID));
-    pedido.addCell(new Cell().add("Fecha de expedición").setBold());
-    pedido.addCell(new Cell().add(date));
-    pedido.addCell(new Cell().add("Razón Social: ").setBold().setBorder(Border.NO_BORDER));
-    pedido.addCell(new Cell().add(rzSocial).setBorder(Border.NO_BORDER));
-    
-    Cell factura = new Cell();
-    factura.add("FACTURA");
-    factura.setBorder(Border.NO_BORDER);
-    factura.setFontSize(28);
-    factura.setTextAlignment(TextAlignment.RIGHT);
-    factura.setBold();
-    table.addCell(factura);
-    table.addCell(new Cell().add(datosEmp).setBorder(Border.NO_BORDER));
-    table.addCell(new Cell().add(pedido).setBorder(Border.NO_BORDER));
-    
-    Table datosC = new Table(1);
-    datosC.addCell(new Cell().add("FACTURAR A:").setBold().setBorder(Border.NO_BORDER));
-    datosC.addCell(new Cell().add(datos).setBorder(Border.NO_BORDER));
-    
-    doc.add(table);
-    doc.add(datosC);
-    
-    Paragraph space = new Paragraph("\n");
-    doc.add(space);
-    
-    Border border = new SolidBorder(Color.GRAY,2f);
-    Table divider = new Table(fullwidth);
-    divider.setBorder(border);
-    doc.add(divider);
-    
-    doc.add(space);
-    
-    Table t = new Table(6);
-    t.addCell(new Cell().add("Tipo").setBold().setTextAlignment(TextAlignment.CENTER).setBackgroundColor(Color.LIGHT_GRAY));
-    t.addCell(new Cell().add("Sabor").setBold().setTextAlignment(TextAlignment.CENTER).setBackgroundColor(Color.LIGHT_GRAY));
-    t.addCell(new Cell().add("Aditivos").setBold().setTextAlignment(TextAlignment.CENTER).setBackgroundColor(Color.LIGHT_GRAY));
-    t.addCell(new Cell().add("Precio c/u").setBold().setTextAlignment(TextAlignment.CENTER).setBackgroundColor(Color.LIGHT_GRAY));
-    t.addCell(new Cell().add("Cantidad").setBold().setTextAlignment(TextAlignment.CENTER).setBackgroundColor(Color.LIGHT_GRAY));
-    t.addCell(new Cell().add("Monto").setBold().setTextAlignment(TextAlignment.CENTER).setBackgroundColor(Color.LIGHT_GRAY));
-    
-    try {
-            PreparedStatement ps = null;
-            ResultSet rs = null;
-            Conexion conn = new Conexion();
-            java.sql.Connection con = conn.getConexion();
-            int id = Integer.parseInt(ID);
-            String sql = "CALL Mostrar_detalles("+ id +")";
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                t.addCell(new Cell().add(rs.getString("tipo")).setTextAlignment(TextAlignment.CENTER));
-                t.addCell(new Cell().add(rs.getString("sabor")).setTextAlignment(TextAlignment.CENTER));
-                t.addCell(new Cell().add(rs.getString("adit")).setTextAlignment(TextAlignment.CENTER));
-                t.addCell(new Cell().add("$ "+rs.getString("costo")).setTextAlignment(TextAlignment.CENTER));
-                t.addCell(new Cell().add(rs.getString("cantidad")).setTextAlignment(TextAlignment.CENTER));
-                total = parseFloat(rs.getString("costo"))*parseFloat(rs.getString("cantidad")); //GENERAR EL MONTO TOTAL EN CASO DE SER VARIOS PRODUCTOS DEL MISMO
-                pagoTotal += total;
-                t.addCell(new Cell().add("$ "+String.valueOf(total)).setTextAlignment(TextAlignment.CENTER));
-            }
-            doc.add(t);
-            conn.Cerrar_Conexion();
-            con.close();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this,"Se ha generado un error en la consulta de datos.");
-            System.out.println(ex);
-        }
-    Table gasto = new Table(new float[]{twocol/3.27f,twocol/3.27f});
-    gasto.addCell(new Cell().add("Total a pagar:").setBold());
-    gasto.addCell(new Cell().add("$ "+String.valueOf(pagoTotal)).setTextAlignment(TextAlignment.CENTER));
-    gasto.setHorizontalAlignment(HorizontalAlignment.RIGHT);
-    
-    doc.add(gasto);
-    doc.add(space);
-    doc.add(space);
-    doc.add(space);
-    doc.add(space);
-    doc.add(space);
-    doc.add(space);
-    doc.add(space);
-    
-    Paragraph extra = new Paragraph("Total a pagar 15 días. Las cantidades vencidas tendrán un cargo de servicio de un 1% por mes.");
-    extra.setFontSize(12);
-    doc.add(new Cell().add(extra).setBorder(Border.NO_BORDER));
-    
-    doc.close();
-    JOptionPane.showMessageDialog(this, "Se ha generado la factura.");
-    }catch (Exception e){
-        JOptionPane.showMessageDialog(this,"Se ha generado un error al crear la factura.");
-            System.out.println(e);
-        }*/
-    }
-    
+    Facturar f = new Facturar();
     Validar v = new Validar();
     ImageIcon logo = new ImageIcon(".\\src\\icons\\jeliHD.png");
     String ID_pedido,nom, date, nomClient, ID_prod, ID_detalle;
