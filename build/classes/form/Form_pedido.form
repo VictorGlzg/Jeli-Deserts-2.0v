@@ -294,7 +294,7 @@
               <Border info="null"/>
             </Property>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="3" name="/icons/clean.png"/>
+              <Image iconType="3" name="/icons/icono_doc.png"/>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value="Abrir pedidos"/>
             <Property name="radius" type="int" value="65"/>

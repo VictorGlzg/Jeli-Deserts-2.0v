@@ -169,7 +169,7 @@ public class Form_pedido extends javax.swing.JPanel {
         });
 
         framePedidosbutton.setBorder(null);
-        framePedidosbutton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/clean.png"))); // NOI18N
+        framePedidosbutton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/icono_doc.png"))); // NOI18N
         framePedidosbutton.setToolTipText("Abrir pedidos");
         framePedidosbutton.setRadius(65);
         framePedidosbutton.addActionListener(new java.awt.event.ActionListener() {
