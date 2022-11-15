@@ -37,6 +37,8 @@ public class Form_pedido extends javax.swing.JPanel {
         trashbutton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         modbutton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         cleanbutton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        
     }
 
     @SuppressWarnings("unchecked")

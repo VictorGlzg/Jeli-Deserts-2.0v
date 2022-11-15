@@ -5,7 +5,6 @@ import java.awt.Cursor;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import static java.lang.Float.parseFloat;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -51,6 +50,7 @@ public class FramePedidos extends javax.swing.JFrame {
         cumplebutton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         factbutton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
+        miniBarrabusq1.t = tableProductos;
     }
 
     @SuppressWarnings("unchecked")
@@ -67,6 +67,7 @@ public class FramePedidos extends javax.swing.JFrame {
         tinydatosProducto1 = new general.tinydatosProducto();
         spTable1 = new javax.swing.JScrollPane();
         tableProductos = new swing.Table();
+        miniBarrabusq1 = new component.miniBarrabusq();
         panelBorderModify1 = new swing.PanelBorderModify();
         nombreLabel1 = new javax.swing.JLabel();
         addbutton = new swing.MyButton();
@@ -177,18 +178,25 @@ public class FramePedidos extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(tinydatosProducto1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(spTable1, javax.swing.GroupLayout.PREFERRED_SIZE, 336, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(spTable1, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(miniBarrabusq1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panelBorder2Layout.setVerticalGroup(
             panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorder2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(panelBorder2Layout.createSequentialGroup()
                 .addGroup(panelBorder2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(spTable1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(tinydatosProducto1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addGroup(panelBorder2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(miniBarrabusq1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(spTable1, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelBorder2Layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addComponent(tinydatosProducto1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
 
         nombreLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -356,9 +364,9 @@ public class FramePedidos extends javax.swing.JFrame {
             panelBorder1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelBorder1Layout.createSequentialGroup()
                 .addComponent(panelMoving, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelBorder2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(panelBorderModify1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -670,6 +678,10 @@ public class FramePedidos extends javax.swing.JFrame {
             System.out.println(ex.toString());
         }
     }
+    
+    public void search(String ss){
+        
+    }
     Facturar f = new Facturar();
     Validar v = new Validar();
     ImageIcon logo = new ImageIcon(".\\src\\icons\\jeliHD.png");
@@ -681,6 +693,7 @@ public class FramePedidos extends javax.swing.JFrame {
     private swing.MyButton cumplebutton;
     private swing.MyButton factbutton;
     private javax.swing.JLabel minButton;
+    private component.miniBarrabusq miniBarrabusq1;
     private swing.MyButton modbutton;
     private javax.swing.JLabel nombreLabel;
     private javax.swing.JLabel nombreLabel1;
