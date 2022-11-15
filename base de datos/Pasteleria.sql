@@ -388,7 +388,6 @@ declare message varchar(50);
 return message;	
 END // delimiter ;
 SELECT Mod_id_prod(99,0);
--- select Mod_tipo_prod(99,'Pastel');
 
 DELIMITER // 
 CREATE PROCEDURE Mostrar_Productos()  
@@ -535,3 +534,42 @@ declare message varchar(50);
 	end if;
 return message;	
 END // delimiter ;
+
+-- CALCULOS ESTADISTICOS
+DELIMITER // 
+CREATE PROCEDURE dineroGanadoxMes(idpedido int,  mes date)
+BEGIN
+declare message varchar(50);
+if (exists(select id from Pedido where id like idpedido)) then
+	select * from Pedido join Cliente on Pedido.id_client=Cliente.id_client where id = idpedido;
+else
+	set message = 'Pedido no encontrado';
+end if;
+END // DELIMITER ;
+--  select avg();
+call dineroGanadoxMes();
+-- drop PROCEDURE dineroGanadoxMes();
+
+select * from Pedido join Cliente on Pedido.id_client=Cliente.id_client where month(fecha)=4;
+-- select * from Pedido join Cliente on Pedido.id_client=Cliente.id_client where id = idpedido;
+
+-- GASTO DEL MES 4 POR NOMBRE
+select nom_client, costo*cantidad as gasto 
+from Detalle_Ped_Prod 
+join Productos on prod_id=Productos.id 
+join Pedido on ped_id=Pedido.id 
+join Cliente on Pedido.id_client=Cliente.id_client
+where month(fecha)=4;
+
+-- PROMEDIO DE VENTAS EN EL MES 4
+select avg(costo*cantidad) as ventas 
+from Detalle_Ped_Prod 
+join Productos on prod_id=Productos.id 
+join Pedido on ped_id=Pedido.id 
+where month(fecha)=4;
+-- GASTOS TOTALES DE TODOS LOS TIEMPOS
+select nom_client, costo*cantidad as gasto 
+from Detalle_Ped_Prod 
+join Productos on prod_id=Productos.id 
+join Pedido on ped_id=Pedido.id 
+join Cliente on Pedido.id_client=Cliente.id_client;
