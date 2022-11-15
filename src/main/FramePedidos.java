@@ -16,6 +16,10 @@ import java.util.Calendar;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.table.DefaultTableModel;
+import swing.ScrollBar;
 
 public class FramePedidos extends javax.swing.JFrame {
 
@@ -28,8 +32,25 @@ public class FramePedidos extends javax.swing.JFrame {
         setIconImage(logo.getImage());
         setLocationRelativeTo(null); //Centraliza la pantalla
         
+        spTable1.setVerticalScrollBar(new ScrollBar());
+        spTable1.getVerticalScrollBar().setBackground(Color.WHITE);
+        spTable1.getViewport().setBackground(Color.WHITE);
+        JPanel p = new JPanel();
+        p.setBackground(Color.WHITE);
+        spTable1.setCorner(JScrollPane.UPPER_RIGHT_CORNER, p);
+        
+        spTable = spTable1;
+        
         closeButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         minButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        addbutton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        trashbutton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        modbutton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        cleanbutton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        cumplebutton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        factbutton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
     }
 
     @SuppressWarnings("unchecked")
@@ -45,7 +66,7 @@ public class FramePedidos extends javax.swing.JFrame {
         panelBorder2 = new swing.PanelBorder();
         tinydatosProducto1 = new general.tinydatosProducto();
         spTable1 = new javax.swing.JScrollPane();
-        table2 = new swing.Table();
+        tableProductos = new swing.Table();
         panelBorderModify1 = new swing.PanelBorderModify();
         nombreLabel1 = new javax.swing.JLabel();
         addbutton = new swing.MyButton();
@@ -125,7 +146,7 @@ public class FramePedidos extends javax.swing.JFrame {
                 return false;
             }
         };
-        table2.setModel(new javax.swing.table.DefaultTableModel(
+        tableProductos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -141,13 +162,13 @@ public class FramePedidos extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        table2.getTableHeader().setReorderingAllowed(false);
-        table2.addMouseListener(new java.awt.event.MouseAdapter() {
+        tableProductos.getTableHeader().setReorderingAllowed(false);
+        tableProductos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                table2MouseClicked(evt);
+                tableProductosMouseClicked(evt);
             }
         });
-        spTable1.setViewportView(table2);
+        spTable1.setViewportView(tableProductos);
 
         javax.swing.GroupLayout panelBorder2Layout = new javax.swing.GroupLayout(panelBorder2);
         panelBorder2.setLayout(panelBorder2Layout);
@@ -366,28 +387,59 @@ public class FramePedidos extends javax.swing.JFrame {
     }//GEN-LAST:event_minButtonMouseClicked
 
     private void addbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbuttonActionPerformed
-        
+    //ALTA
+       String tipo = "", idped="",idprod="",cant="",adit="";
+        tipo = tinydatosProducto1.tipoField.getText();
+        cant = tinydatosProducto1.cantidadField.getText();
+        adit = tinydatosProducto1.aditivoField.getText();
+       if(v.verAlfa(tipo,"Producto")&&(v.verNum(cant, "Cantidad"))){
+       table.setRowSorter(null);
+       PreparedStatement ps = null;
+            try {
+                Conexion objCon = new Conexion();
+                Connection conn = objCon.getConexion();
+                idped = ID_pedido;
+                idprod = ID_prod;
+                String sql = "SELECT Alta_Detalle("+ idped + "," + idprod + "," + cant + ",'"+ adit +"')";
+                System.out.println(sql);
+                ps = conn.prepareStatement(sql);
+                ps.execute();
+                JOptionPane.showMessageDialog(this, "Producto registrado con exito.");
+                tinydatosProducto1.limpiar();
+                actualizar();
+                tinydatosProducto1.limpiar();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error al registrar un producto.");
+                System.out.println(ex);
+            }
+       }//END IF  
     }//GEN-LAST:event_addbuttonActionPerformed
 
     private void trashbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trashbuttonActionPerformed
-        /*table.setRowSorter(null);
-        if (!"".equals(datosPedido1.idField.trim())) {
+        table.setRowSorter(null);
+        if (!"".equals(ID_detalle.trim())) {
             int action = JOptionPane.showConfirmDialog(null, "Estas por eliminar un registro de la base de datos.","ELIMINAR",JOptionPane.YES_NO_OPTION);
             if(action == 0){
                 Eliminar_pedido();
             }
         }else{
             JOptionPane.showMessageDialog(this, "No ha seleccionado ningun pedido de la lista.");
-        }*/
+        }
     }//GEN-LAST:event_trashbuttonActionPerformed
 
     private void cleanbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cleanbuttonActionPerformed
-        /*table.setRowSorter(null);
-        datosPedido1.limpiar();*/
+        table.setRowSorter(null);
+        tinydatosProducto1.limpiar();
     }//GEN-LAST:event_cleanbuttonActionPerformed
 
     private void modbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modbuttonActionPerformed
-        
+        String tipo = "", idped="",idprod="",cant="",adit="";
+        tipo = tinydatosProducto1.tipoField.getText();
+        cant = tinydatosProducto1.cantidadField.getText();
+        adit = tinydatosProducto1.aditivoField.getText();
+        if(v.verAlfa(tipo,"Producto")&&(v.verNum(cant, "Cantidad"))){
+        modificar();
+            }    
     }//GEN-LAST:event_modbuttonActionPerformed
 
     private void factbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_factbuttonActionPerformed
@@ -399,13 +451,97 @@ public class FramePedidos extends javax.swing.JFrame {
     }//GEN-LAST:event_cumplebuttonActionPerformed
 
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
-        
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            Conexion objCon = new Conexion();
+            Connection conn = objCon.getConexion();
+
+            int Fila = table.getSelectedRow();
+            String id = table.getValueAt(Fila, 0).toString();
+            
+            String sql = "CALL Mostrar_detalle(" + id + ")";
+
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ID_detalle = rs.getString("id_detpp");
+                tinydatosProducto1.cantidadField.setText(rs.getString("cantidad"));
+                tinydatosProducto1.aditivoField.setText(rs.getString("adit"));
+                tinydatosProducto1.tipoField.setText(rs.getString("Productos.tipo"));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+        }
     }//GEN-LAST:event_tableMouseClicked
 
-    private void table2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table2MouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_table2MouseClicked
+    private void tableProductosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableProductosMouseClicked
+    actualizarProductos();
+    }//GEN-LAST:event_tableProductosMouseClicked
+    
+    private void actualizarProductos(){
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        try {
+            Conexion objCon = new Conexion();
+            Connection conn = objCon.getConexion();
 
+            int Fila = tableProductos.getSelectedRow();
+            String id = tableProductos.getValueAt(Fila, 0).toString();
+
+            String sql = "CALL Mostrar_ProductoID(" + id + ")";
+
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                ID_prod = rs.getString("id");
+                tinydatosProducto1.tipoField.setText(rs.getString("tipo"));
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+        }
+    }
+    
+    private void actualizar() {
+        try {
+            DefaultTableModel modelo = new DefaultTableModel();
+            table.setModel(modelo);
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Conexion conn = new Conexion();
+            Connection con = conn.getConexion();
+            String sql = "CALL Mostrar_detalles("+ID_pedido+")";
+            /*else {
+                sql = "CALL Mostrar_Pedido(" + campo + ")";
+            }*/
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            ResultSetMetaData rsMd = (ResultSetMetaData) rs.getMetaData();
+            int cantidadColumnas = rsMd.getColumnCount();
+            modelo.addColumn("ID");
+            modelo.addColumn("Tipo");
+            modelo.addColumn("Sabor");
+            modelo.addColumn("Cantidad");
+            modelo.addColumn("Aditivos");
+            modelo.addColumn("Costo");
+            table.getColumnModel().getColumn(0).setMaxWidth(50);
+
+            while (rs.next()) {
+                Object[] filas = new Object[cantidadColumnas];
+                for (int i = 0; i < cantidadColumnas; i++) {
+                    filas[i] = rs.getObject(i + 1);
+                }
+                modelo.addRow(filas);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+            tinydatosProducto1.limpiar();
+        }
+    }
+    
     public static void main(String args[]) {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -416,48 +552,18 @@ public class FramePedidos extends javax.swing.JFrame {
     }
     
     public void iniciar(){
-        pedidoIDlabel.setText("PEDIDO:#"+ID);
+        pedidoIDlabel.setText("PEDIDO:#"+ID_pedido);
         nombreLabel.setText(nom);
-        /*initComponents();
-        setIconImage(logo.getImage());
         tablaProd();
-        try {
-            jTable1.setModel(modelo);
-            PreparedStatement ps = null;
-            ResultSet rs = null;
-            Conexion conn = new Conexion();
-            java.sql.Connection con = conn.getConexion();
-            int id = Integer.parseInt(ID);
-            String sql = "CALL Mostrar_detalles("+ id +")";
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-            ResultSetMetaData rsMd = (ResultSetMetaData) rs.getMetaData();
-            int cantidadColumnas = rsMd.getColumnCount();
-            modelo.addColumn("ID");
-            modelo.addColumn("Cantidad");
-            modelo.addColumn("Tipo");
-            modelo.addColumn("Sabor");
-            modelo.addColumn("Aditivos");
-            modelo.addColumn("Costo");
-            int[] anchos = {5, 20, 10, 50, 50 ,20};
-            for (int i = 0; i < jTable1.getColumnCount(); i++) {
-                jTable1.getColumnModel().getColumn(i).setPreferredWidth(anchos[i]);
-            }
-            while (rs.next()) {
-                Object[] filas = new Object[cantidadColumnas];
-                for (int i = 0; i < cantidadColumnas; i++) {
-                    filas[i] = rs.getObject(i + 1);
-                }
-                modelo.addRow(filas);
-            }
-            conn.Cerrar_Conexion();
-            con.close();
-        } catch (SQLException ex) {
-            System.err.println(ex.toString());
-        }*/
+        String sql = "CALL Mostrar_detalles("+ ID_pedido +")";
+        table.sqlConexionDetalles(sql);
     }
     
-     private int x;
+    private void tablaProd(){
+        tableProductos.sqlConexionProducto("CALL Mostrar_Productos()");
+    }
+    
+    private int x;
     private int y;
     //Permite guardar las coordenadas del mouse en x, y para al presionar poder desplazar el frame completo por la pantalla.
     public void initMoving(JFrame fram) {
@@ -478,9 +584,71 @@ public class FramePedidos extends javax.swing.JFrame {
     }
     
     public void obtenerID(String i, String n, String nC){
-    ID = i;
+    ID_pedido = i;
     nom = n;
     nomClient=nC;
+    }
+    
+    private void modificar(){
+        /*table.setRowSorter(null);
+        PreparedStatement ps = null;
+        String id = "",cantidad = "", aditivo = "",producto = "";
+            try {
+                Conexion objCon = new Conexion();
+                Connection conn = objCon.getConexion();
+                id = jTextField1.getText();
+                cantidad = jTextField3.getText();
+                aditivo = jTextField6.getText();
+                producto = jTextField2.getText();
+                if(Fproducto){
+                String sql = "SELECT Mod_prod_detpp("+ id +"," + producto + ")";
+                ps = conn.prepareStatement(sql);
+                ps.execute();
+                }
+                if(Fcantidad){
+                String sql = "SELECT Mod_cant_detpp("+ id +"," + cantidad + ")";
+                ps = conn.prepareStatement(sql);
+                ps.execute();
+                }
+                if(Faditivo){
+                String sql = "SELECT Mod_adit_detpp("+ id +",'" + aditivo + "')";
+                ps = conn.prepareStatement(sql);
+                ps.execute();
+                }
+                if(!Fproducto&&!Fcantidad&&!Faditivo)
+                    JOptionPane.showMessageDialog(this, "No se ha selecionado ningún campo a modificar.");
+                else{
+                    JOptionPane.showMessageDialog(this, "Producto se ha modificado con exito.");
+                    limpiar();
+                    actualizar();
+                }
+                
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error al modificar el producto.");
+                System.out.println(ex);
+            }*/
+    }
+    
+    public void Eliminar_pedido(){
+        //BAJA
+        table.setRowSorter(null);
+        PreparedStatement ps = null;
+        try {
+            Conexion objCon = new Conexion();
+            Connection conn = objCon.getConexion();
+            String id = ID_detalle;
+            String sql = "SELECT Baja_Detalle('" + id + "')";
+            System.out.println(sql);
+            ps = conn.prepareStatement(sql);
+            ps.execute();
+            JOptionPane.showMessageDialog(this, "El pedido fue eliminado correctamente.");
+            tinydatosProducto1.limpiar();
+            actualizar();
+            tinydatosProducto1.limpiar();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al Eliminar el pedido.");
+            System.out.println(ex.toString());
+        }
     }
     
     private void facturar(){  
@@ -642,8 +810,9 @@ public class FramePedidos extends javax.swing.JFrame {
         }*/
     }
     
+    Validar v = new Validar();
     ImageIcon logo = new ImageIcon(".\\src\\icons\\jeliHD.png");
-    String ID,nom, date, nomClient;
+    String ID_pedido,nom, date, nomClient, ID_prod, ID_detalle;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private swing.MyButton addbutton;
     private swing.MyButton cleanbutton;
@@ -662,7 +831,7 @@ public class FramePedidos extends javax.swing.JFrame {
     private javax.swing.JScrollPane spTable;
     private javax.swing.JScrollPane spTable1;
     public swing.Table table;
-    public swing.Table table2;
+    public swing.Table tableProductos;
     private general.tinydatosProducto tinydatosProducto1;
     private swing.MyButton trashbutton;
     // End of variables declaration//GEN-END:variables

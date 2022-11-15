@@ -157,4 +157,42 @@ public class Table extends JTable {
             System.err.println(ex.toString());
         }
     }
+    
+    public void sqlConexionDetalles(String sql) {
+        DefaultTableModel model = new DefaultTableModel();
+        try {
+            this.setModel(model);
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Conexion conn = new Conexion();
+            java.sql.Connection con = conn.getConexion();
+            
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            ResultSetMetaData rsMd = (ResultSetMetaData) rs.getMetaData();
+            int cantidadColumnas = rsMd.getColumnCount();
+            model.addColumn("ID");
+            model.addColumn("Tipo");
+            model.addColumn("Sabor");
+            model.addColumn("Cantidad");
+            model.addColumn("Aditivos");
+            model.addColumn("Costo");
+            
+            this.getColumnModel().getColumn(0).setMaxWidth(50);
+            
+            while (rs.next()) {
+                Object[] filas = new Object[cantidadColumnas];
+                for (int i = 0; i < cantidadColumnas; i++) { 
+                    filas[i] = rs.getObject(i+1);
+                }
+                model.addRow(filas);
+                
+            }
+            conn.Cerrar_Conexion();
+            con.close();
+            
+        } catch (SQLException ex) {
+            System.err.println(ex.toString());
+        }
+    }
 }

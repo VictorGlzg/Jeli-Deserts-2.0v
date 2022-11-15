@@ -9,15 +9,15 @@ public String idField ="";
     public void llenarDatos(String id, String tipo,String costo,String sabor){
         idField = id;
         tipoField.setText(tipo);
-        costoField.setText(costo);
-        saborField.setText(sabor);
+        cantidadField.setText(costo);
+        aditivoField.setText(sabor);
         
     }
     
     public void limpiar(){
         tipoField.setText("");
-        costoField.setText("");
-        saborField.setText("");
+        cantidadField.setText("");
+        aditivoField.setText("");
         
     }
     
@@ -28,9 +28,9 @@ public String idField ="";
         lbValues2 = new javax.swing.JLabel();
         tipoField = new javax.swing.JTextField();
         lbValues = new javax.swing.JLabel();
-        costoField = new javax.swing.JTextField();
+        cantidadField = new javax.swing.JTextField();
         lbValues3 = new javax.swing.JLabel();
-        saborField = new javax.swing.JTextField();
+        aditivoField = new javax.swing.JTextField();
         lbValues1 = new javax.swing.JLabel();
 
         setOpaque(false);
@@ -49,14 +49,14 @@ public String idField ="";
         lbValues.setForeground(new java.awt.Color(120, 21, 22));
         lbValues.setText("Cantidad:");
 
-        costoField.addActionListener(new java.awt.event.ActionListener() {
+        cantidadField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                costoFieldActionPerformed(evt);
+                cantidadFieldActionPerformed(evt);
             }
         });
-        costoField.addKeyListener(new java.awt.event.KeyAdapter() {
+        cantidadField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                costoFieldKeyTyped(evt);
+                cantidadFieldKeyTyped(evt);
             }
         });
 
@@ -64,9 +64,9 @@ public String idField ="";
         lbValues3.setForeground(new java.awt.Color(120, 21, 22));
         lbValues3.setText("Aditivo:");
 
-        saborField.addKeyListener(new java.awt.event.KeyAdapter() {
+        aditivoField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
-                saborFieldKeyTyped(evt);
+                aditivoFieldKeyTyped(evt);
             }
         });
 
@@ -95,8 +95,8 @@ public String idField ="";
                             .addComponent(lbValues3))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(costoField, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
-                            .addComponent(saborField))))
+                            .addComponent(cantidadField, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                            .addComponent(aditivoField))))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -111,10 +111,10 @@ public String idField ="";
                 .addGap(14, 14, 14)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lbValues)
-                    .addComponent(costoField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cantidadField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(saborField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(aditivoField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbValues3))
                 .addContainerGap(25, Short.MAX_VALUE))
         );
@@ -126,30 +126,30 @@ public String idField ="";
         }
     }//GEN-LAST:event_tipoFieldKeyTyped
 
-    private void costoFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_costoFieldKeyTyped
-    if(costoField.getText().length()>=10){
+    private void cantidadFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cantidadFieldKeyTyped
+    if(cantidadField.getText().length()>=10){
         evt.consume();
         }
-    }//GEN-LAST:event_costoFieldKeyTyped
+    }//GEN-LAST:event_cantidadFieldKeyTyped
 
-    private void saborFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_saborFieldKeyTyped
-    if(saborField.getText().length()>=20){
+    private void aditivoFieldKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_aditivoFieldKeyTyped
+    if(aditivoField.getText().length()>=20){
         evt.consume();
         }
-    }//GEN-LAST:event_saborFieldKeyTyped
+    }//GEN-LAST:event_aditivoFieldKeyTyped
 
-    private void costoFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_costoFieldActionPerformed
+    private void cantidadFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cantidadFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_costoFieldActionPerformed
+    }//GEN-LAST:event_cantidadFieldActionPerformed
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    public javax.swing.JTextField costoField;
+    public javax.swing.JTextField aditivoField;
+    public javax.swing.JTextField cantidadField;
     private javax.swing.JLabel lbValues;
     private javax.swing.JLabel lbValues1;
     private javax.swing.JLabel lbValues2;
     private javax.swing.JLabel lbValues3;
-    public javax.swing.JTextField saborField;
     public javax.swing.JTextField tipoField;
     // End of variables declaration//GEN-END:variables
 }
