@@ -6,6 +6,7 @@ import form.Form_info;
 import form.Form_pedido;
 import form.Form_producto;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Toolkit;
 import java.awt.event.WindowEvent;
 import javax.swing.ImageIcon;
@@ -28,6 +29,9 @@ ImageIcon logo = new ImageIcon(".\\src\\icons\\jeliHD.png");
         formprod = new Form_producto();
         forminfo = new Form_info();
         formpedidos = new Form_pedido();
+        
+        minButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
         menu.initMoving(this); //Llama a un método de la clase menu, para que el frame se pueda mover através de un evento de mouse.
         menu.addEventMenuSelected(new EventMenuSelected() {
             @Override
@@ -89,7 +93,7 @@ ImageIcon logo = new ImageIcon(".\\src\\icons\\jeliHD.png");
         menu = new component.Menu();
         header1 = new component.Header();
         mainPanel = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        minButton = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocation(new java.awt.Point(0, 0));
@@ -105,10 +109,10 @@ ImageIcon logo = new ImageIcon(".\\src\\icons\\jeliHD.png");
         mainPanel.setOpaque(false);
         mainPanel.setLayout(new java.awt.BorderLayout());
 
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/encogimiento (1).png"))); // NOI18N
-        jLabel1.addMouseListener(new java.awt.event.MouseAdapter() {
+        minButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/encogimiento (1).png"))); // NOI18N
+        minButton.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jLabel1MouseClicked(evt);
+                minButtonMouseClicked(evt);
             }
         });
 
@@ -122,7 +126,7 @@ ImageIcon logo = new ImageIcon(".\\src\\icons\\jeliHD.png");
                     .addGroup(panelBorder1Layout.createSequentialGroup()
                         .addComponent(header1, javax.swing.GroupLayout.PREFERRED_SIZE, 783, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel1)
+                        .addComponent(minButton)
                         .addContainerGap())
                     .addGroup(panelBorder1Layout.createSequentialGroup()
                         .addComponent(mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 833, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -136,7 +140,7 @@ ImageIcon logo = new ImageIcon(".\\src\\icons\\jeliHD.png");
                     .addComponent(header1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panelBorder1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jLabel1)))
+                        .addComponent(minButton)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -155,9 +159,9 @@ ImageIcon logo = new ImageIcon(".\\src\\icons\\jeliHD.png");
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jLabel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel1MouseClicked
+    private void minButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_minButtonMouseClicked
     this.setState(this.ICONIFIED);
-    }//GEN-LAST:event_jLabel1MouseClicked
+    }//GEN-LAST:event_minButtonMouseClicked
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -193,9 +197,9 @@ ImageIcon logo = new ImageIcon(".\\src\\icons\\jeliHD.png");
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private component.Header header1;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel mainPanel;
     private component.Menu menu;
+    private javax.swing.JLabel minButton;
     private swing.PanelBorder panelBorder1;
     // End of variables declaration//GEN-END:variables
 }
