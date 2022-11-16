@@ -1,6 +1,5 @@
 package component;
 //              LIBRERÍAS
-//PRUEBAAAAAAAS
 import event.EventMenuSelected;
 import java.awt.Color;
 import java.awt.GradientPaint;
@@ -39,10 +38,6 @@ public class Menu extends javax.swing.JPanel {
         listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
 
         listMenu1.addItem(new Model_Menu("", "Estadistica", Model_Menu.MenuType.TITLE));
-        //listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
-        /*listMenu1.addItem(new Model_Menu("6", "Icons", Model_Menu.MenuType.MENU));
-        listMenu1.addItem(new Model_Menu("7", "Sample Page", Model_Menu.MenuType.MENU));
-        listMenu1.addItem(new Model_Menu("8", "Extra", Model_Menu.MenuType.MENU));*/
         
         listMenu1.addItem(new Model_Menu("", " ", Model_Menu.MenuType.EMPTY));
         listMenu1.addItem(new Model_Menu("", "Otros", Model_Menu.MenuType.TITLE));
@@ -65,7 +60,7 @@ public class Menu extends javax.swing.JPanel {
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/jeliHD.png"))); // NOI18N
-        jLabel1.setText("JELI-DESERTS");
+        jLabel1.setText("JELI-DESSERTS");
 
         javax.swing.GroupLayout panelMovingLayout = new javax.swing.GroupLayout(panelMoving);
         panelMoving.setLayout(panelMovingLayout);
