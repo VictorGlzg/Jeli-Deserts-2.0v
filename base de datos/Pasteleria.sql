@@ -2,6 +2,10 @@
 create database Pasteleria;
 use Pasteleria;
 
+-- SELECT Mod_stock(100, 10);
+-- SELECT * FROM PRODUCTOS;
+-- SELECT reducir_stock(100, 50);
+
 create table Cliente
 (
 	id_client int auto_increment primary key,
@@ -11,16 +15,17 @@ create table Cliente
     tel_client varchar(10),
     cumpleA date,
     unique (tel_client)
-)auto_increment=500;
-
+)auto_increment=499;
+-- Select * from cliente;
 create table Productos
 (
 	id int auto_increment primary key,
     tipo varchar(20),
     costo double,
-    sabor varchar(20)
+    sabor varchar(20),
+    stock int
 )auto_increment=99;
-
+-- Select * from productos;
 create table Pedido
 (
 	id int auto_increment primary key,
@@ -41,6 +46,7 @@ create table Detalle_Ped_Prod
 )auto_increment=200;
 
 insert into Cliente (nom_client,correo,dir_client,tel_client,cumpleA) values
+("[NO REGISTRADO]","","","","1000/01/01"),
 ("Rufo Patino","RufoPatino@jourrapide.com","Cruce Casa de Postas, 981 Fuente Vaqueros",6391122583,"1987/03/7"),
 ("Martiniano Bustos","MartinianoBustos@teleworm.us","Pl. Virgen Blanca, 960 Vic",6517952993,"1970/01/02"),
 ("Mijal Muñoz","MijalMunoz@jourrapide.com","C/ Fernández de Leceta, 560 la Nucia",6280332933,"1989/04/22"),
@@ -54,18 +60,18 @@ insert into Cliente (nom_client,correo,dir_client,tel_client,cumpleA) values
 
 -- select * from Cliente;
 
-insert into Productos(tipo,costo,sabor)values
-("Promo especial",0,""),
-("Pastel",150.50,"Chocolate"),
-("Galletas",40.50,"Vainilla"),
-("Cupcake",10,"Vainilla"),
-("Brownie",15,"Chocolate"),
-("Pay",50,"Queso"),
-("Budin",140,"Naranja"),
-("Pastel Helado",240.50,"Napolitano"),
-("Carlota",100,"Limón"),
-("Bizcocho",80.40,"Manzana"),
-("Flan",20.50,"Queso");
+insert into Productos(tipo,costo,sabor,stock)values
+("Promo especial",0,"",0),
+("Pastel",150.50,"Chocolate",0),
+("Galletas",40.50,"Vainilla",0),
+("Cupcake",10,"Vainilla",0),
+("Brownie",15,"Chocolate",0),
+("Pay",50,"Queso",0),
+("Budin",140,"Naranja",0),
+("Pastel Helado",240.50,"Napolitano",0),
+("Carlota",100,"Limón",0),
+("Bizcocho",80.40,"Manzana",0),
+("Flan",20.50,"Queso",0);
 
 insert into Pedido (fecha,id_client) values
 ("2022/03/27",501),
@@ -151,7 +157,7 @@ end// delimiter ;
 DELIMITER // 
 CREATE PROCEDURE Mostrar_Clientes()  
 BEGIN 
-SELECT * FROM Cliente ; 
+SELECT * FROM Cliente where id_client != 0 ; 
 END // DELIMITER ; 
 
 -- call Mostrar_Clientes();
@@ -207,6 +213,19 @@ END // delimiter ;
 -- select Mod_nom_client(521,'b');
 -- drop function Mod_nom_client;
 
+delimiter //
+create function Mod_id_client(idclient int, newid int) returns varchar(50)
+READS SQL DATA 
+DETERMINISTIC 
+BEGIN
+declare message varchar(50);
+	if (exists(select id_client from Cliente where id_client like idclient)) then
+		update Cliente set id_client = newid where id_client = idclient;
+		set message = 'Modificación realizada';
+	end if;
+return message;	
+END // delimiter ;
+SELECT Mod_id_client(499,0);
 -- **********************************************************************************
 -- Pedidos
 
@@ -336,7 +355,9 @@ READS SQL DATA
 DETERMINISTIC 
 begin 
 declare message varchar (50);
-		insert into Productos (tipo,costo,sabor) values (tipoprod,costoprod,saborprod); 
+declare st int;
+set st = 0;
+		insert into Productos (tipo,costo,sabor,stock) values (tipoprod,costoprod,saborprod,st);
 		set message = 'Alta exitosa';
 return message; 
 end// delimiter ;
@@ -376,6 +397,35 @@ return message;
 END // delimiter ;
 
 delimiter //
+create function Mod_stock(idprod int, s int) returns varchar(50)
+READS SQL DATA 
+DETERMINISTIC 
+BEGIN
+declare message varchar(50);
+	if (exists(select id from Productos where id like idprod)) then
+		update Productos set stock = s where id = idprod;
+		set message = 'Stock actualizado';
+	end if;
+return message;	
+END // delimiter ;
+
+delimiter //
+create function reducir_stock(idprod int, s int) returns varchar(50)
+READS SQL DATA 
+DETERMINISTIC 
+BEGIN
+declare message varchar(50);
+	if (exists(select id from Productos where id like idprod and stock > s)) then
+		update Productos set stock = stock - s where id = idprod;
+		set message = 'Compra realizada';
+	else
+		set message = 'No hay suficiente stock';
+	end if;
+return message;	
+END // delimiter ;
+-- select
+
+delimiter //
 create function Mod_id_prod(idprod int, newid int) returns varchar(50)
 READS SQL DATA 
 DETERMINISTIC 
@@ -392,10 +442,10 @@ SELECT Mod_id_prod(99,0);
 DELIMITER // 
 CREATE PROCEDURE Mostrar_Productos()  
 BEGIN 
-SELECT id,tipo,sabor,costo FROM Productos where NOT ( Productos.id = 0);
+SELECT * FROM Productos where NOT ( Productos.id = 0);
 END // DELIMITER ; 
 -- drop procedure Mostrar_Productos;
--- call Mostrar_Producto();
+-- call Mostrar_Productos();
 
 DELIMITER // 
 CREATE PROCEDURE Mostrar_Producto(t varchar(20))
@@ -436,6 +486,7 @@ declare message varchar(50);
 		insert into detalle_ped_prod (ped_id, prod_id, cantidad, adit) values
         (idped, idprod, cant, ad);
         set message = "Alta exitosa";
+        -- SELECT Reducir_stock(idprod, cant);
 	else
 		set message = "Alta no realizada";
 	end if;
@@ -501,35 +552,6 @@ BEGIN
 declare message varchar(50);
 	if (exists(select id_detpp from detalle_ped_prod where id_detpp like id_det)) then
 		update detalle_ped_prod set cantidad = cant,adit = newaditivo, prod_id = id_prod where id_detpp=id_det;
-		set message = 'Modificación realizada';
-	end if;
-return message;	
-END // delimiter ;
-
--- select Mod_cant_detpp(200,4);
-
-delimiter //
-create function Mod_adit_detpp(id_det int, newaditivo varchar(100)) returns varchar(50)
-READS SQL DATA 
-DETERMINISTIC 
-BEGIN
-declare message varchar(50);
-	if (exists(select id_detpp from detalle_ped_prod where id_detpp like id_det)) then
-		update detalle_ped_prod set adit = newaditivo where id_detpp=id_det;
-		set message = 'Modificación realizada';
-	end if;
-return message;	
-END // delimiter ;
--- select Mod_adit_detpp(200, 'Sin nada');
-
-delimiter //
-create function Mod_prod_detpp(id_det int, id_prod int) returns varchar(50)
-READS SQL DATA 
-DETERMINISTIC 
-BEGIN
-declare message varchar(50);
-	if (exists(select id_detpp from detalle_ped_prod where id_detpp like id_det)) then
-		update detalle_ped_prod set prod_id = id_prod where id_detpp=id_det;
 		set message = 'Modificación realizada';
 	end if;
 return message;	

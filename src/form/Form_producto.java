@@ -71,11 +71,11 @@ public class Form_producto extends javax.swing.JPanel {
 
             },
             new String [] {
-                "ID", "Tipo", "Sabor", "Costo"
+                "ID", "Tipo", "Sabor", "Costo", "Stock"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -232,6 +232,7 @@ public class Form_producto extends javax.swing.JPanel {
             modelo.addColumn("Tipo");
             modelo.addColumn("Costo");
             modelo.addColumn("Sabor");
+            modelo.addColumn("Stock");
             
             table.getColumnModel().getColumn(0).setMaxWidth(50);
 

@@ -102,6 +102,7 @@ public class Table extends JTable {
             model.addColumn("Tipo");
             model.addColumn("Sabor");
             model.addColumn("Costo");
+            model.addColumn("Stock");
             
             this.getColumnModel().getColumn(0).setMaxWidth(50);
             
