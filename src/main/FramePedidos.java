@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -19,6 +20,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 import swing.ScrollBar;
+
+//ARREGLAR TICKET DE PRODUCTOS, AGREGAR RESTRICCIÓN A FACTURA 
 
 public class FramePedidos extends javax.swing.JFrame {
 
@@ -499,10 +502,65 @@ public class FramePedidos extends javax.swing.JFrame {
     }//GEN-LAST:event_modbuttonActionPerformed
 
     private void factbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_factbuttonActionPerformed
-        f.cargarDatos(ID_pedido);  
+        f.cargarDatos(ID_pedido);
         f.generarFactura();
+        generarTicket();
+        limpiar();
+        
+        
+        
     }//GEN-LAST:event_factbuttonActionPerformed
 
+    private void generarTicket(){
+        date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+        ArrayList <String> productos = new ArrayList<String>();
+        
+        System.out.println("\t\tJeli-Desserts S.A de C.V\n" +
+        "\t\tPEDIDO[#"+ID_pedido+"]\n" +
+        "\t\tTAMPICO TAMAULIPAS\n" +
+        "\t\tEmiliano Zapata Col. Obrera\n" +
+        "\t\tTampico, Tamaulipas. C.P 89050\n" +
+        "\t\tTeléfono: 8334417038\n" +
+        "============================================================\n"+
+        "\tProductos:\t\t" +"Fecha de expedición: "+date);
+        
+        try {
+            PreparedStatement ps = null;
+            ResultSet rs = null;
+            Conexion conn = new Conexion();
+            java.sql.Connection con = conn.getConexion();
+            int id = Integer.parseInt(ID_pedido);
+            String sql = "CALL Mostrar_detalles("+ id +")";
+            ps = con.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                productos.add("\t"+rs.getString("tipo")+" - "+rs.getString("sabor")+"\t\t"+rs.getString("cantidad")+"\t$ "+rs.getString("costo")+"\n");
+                //rs.getString("adit");
+            }
+            conn.Cerrar_Conexion();
+            con.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null,"Se ha generado un error en la consulta de datos.");
+            System.out.println(ex);
+        }
+        
+        for (String p : productos ) {
+            System.out.print(p);
+        }
+        /*
+        "\tasdasd\t\t\t\n" +
+        "\tasdasd\t\t\t\n" +
+        "\tasd\t\t\t\n" +
+        "\tasdasd\t\t\t\n" +*/
+        
+        System.out.println("\t\tAGRADECEMOS POR SU COMPRA.\n" +
+        "\t\tPAGO EN UNA SOLA EXHIBICIÓN.\n" +
+        "\t\tLUGAR DE EXPEDICIÓN\n" +
+        "\t\tEMILIANO ZAPATA COL. OBRERA.\n" +
+        "\t\tCP 89050.\n" +
+        "\t\tTel. 8334417038");
+    }
+    
     private void cumplebuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cumplebuttonActionPerformed
         validarCumple();
     }//GEN-LAST:event_cumplebuttonActionPerformed
