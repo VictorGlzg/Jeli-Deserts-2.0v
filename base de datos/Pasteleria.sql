@@ -5,7 +5,7 @@ use Pasteleria;
 -- SELECT * FROM PRODUCTOS;
 -- SELECT * FROM DETALLE
 -- SELECT reducir_stock(100, 50);
-
+-- SELECT Alta_Detalle()
 create table Cliente
 (
 	id_client int auto_increment primary key,
@@ -46,7 +46,7 @@ create table Detalle
 )auto_increment=200;
 -- select * from Detalle where id_detpp = 200
 insert into Cliente (nom_client,correo,dir_client,tel_client,cumpleA) values
-("[NO REGISTRADO]","","","","1000/01/01"),
+("[NO REGISTRADO]","","","0000000000","1000/01/01"),
 ("Rufo Patino","RufoPatino@jourrapide.com","Cruce Casa de Postas, 981 Fuente Vaqueros",6391122583,"1987/03/7"),
 ("Martiniano Bustos","MartinianoBustos@teleworm.us","Pl. Virgen Blanca, 960 Vic",6517952993,"1970/01/02"),
 ("Mijal Muñoz","MijalMunoz@jourrapide.com","C/ Fernández de Leceta, 560 la Nucia",6280332933,"1989/04/22"),

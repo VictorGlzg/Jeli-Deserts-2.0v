@@ -376,6 +376,7 @@ public class Form_pedido extends javax.swing.JPanel {
         datosPedido1.llenarDatos(ID,nombre,fecha,tel_client,fecha2);
         datosPedido1.cumpleField.setForeground(new Color(0,0,0));
         datosPedido1.fechaField.setForeground(new Color(0,0,0));
+        datosPedido1.telefonoField.setForeground(Color.black);
     }//GEN-LAST:event_tableMouseClicked
 
     private void modbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modbuttonActionPerformed
@@ -388,11 +389,14 @@ public class Form_pedido extends javax.swing.JPanel {
     if(v.verTel(telefono,"Teléfono")&&(v.verFecha(fecha, "Fecha"))){
     modificar();
         }
+    
     }//GEN-LAST:event_modbuttonActionPerformed
 
     private void cleanbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cleanbuttonActionPerformed
     table.setRowSorter(null);
     datosPedido1.limpiar();
+    datosPedido1.telefonoField.setText("0000000000");
+    datosPedido1.telefonoField.setForeground(Color.WHITE);
     }//GEN-LAST:event_cleanbuttonActionPerformed
 
     private void addbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addbuttonActionPerformed

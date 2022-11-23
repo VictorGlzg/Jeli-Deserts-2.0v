@@ -21,7 +21,7 @@ import javax.swing.JScrollPane;
 import javax.swing.table.DefaultTableModel;
 import swing.ScrollBar;
 
-//ARREGLAR TICKET DE PRODUCTOS, AGREGAR RESTRICCIÓN A FACTURA 
+//AGREGAR RESTRICCIÓN A FACTURA - cuando pedido no tenga productos no generar factura. MODIFICACIÓN DE STOCK ----
 
 public class FramePedidos extends javax.swing.JFrame {
 
@@ -470,7 +470,7 @@ public class FramePedidos extends javax.swing.JFrame {
     }
     
     private void trashbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_trashbuttonActionPerformed
-        System.out.println(ID_detalle);
+        //System.out.println(ID_detalle);
         table.setRowSorter(null);
         if ("".equals(ID_detalle.trim())) {
             JOptionPane.showMessageDialog(this, "No ha seleccionado ningun pedido de la lista.");
@@ -502,13 +502,15 @@ public class FramePedidos extends javax.swing.JFrame {
     }//GEN-LAST:event_modbuttonActionPerformed
 
     private void factbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_factbuttonActionPerformed
-        f.cargarDatos(ID_pedido);
-        f.generarFactura();
-        generarTicket();
+        int action = JOptionPane.showConfirmDialog(null, "Desea generar una factura?.","FACTURACIÓN",JOptionPane.YES_NO_OPTION);
+            if(action == 0){
+                f.cargarDatos(ID_pedido);
+                f.generarFactura();
+            }
+            else{
+            generarTicket();
+            }
         limpiar();
-        
-        
-        
     }//GEN-LAST:event_factbuttonActionPerformed
 
     private void generarTicket(){

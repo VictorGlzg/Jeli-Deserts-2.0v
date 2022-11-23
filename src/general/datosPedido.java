@@ -73,6 +73,16 @@ public String idField ="";
             }
         });
 
+        telefonoField.setForeground(new java.awt.Color(255, 255, 255));
+        telefonoField.setText("0000000000");
+        telefonoField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                telefonoFieldFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                telefonoFieldFocusLost(evt);
+            }
+        });
         telefonoField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 telefonoFieldKeyTyped(evt);
@@ -211,6 +221,20 @@ public String idField ="";
         fechaField.setForeground(new Color(153,153,153));
         }
     }//GEN-LAST:event_fechaFieldFocusLost
+
+    private void telefonoFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_telefonoFieldFocusLost
+    if(telefonoField.getText().equals("")){
+        telefonoField.setText("0000000000");
+        telefonoField.setForeground(Color.WHITE);
+        }
+    }//GEN-LAST:event_telefonoFieldFocusLost
+
+    private void telefonoFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_telefonoFieldFocusGained
+    if(telefonoField.getText().equals("0000000000")){
+        telefonoField.setText("");
+        }
+    telefonoField.setForeground(new Color(0,0,0));
+    }//GEN-LAST:event_telefonoFieldFocusGained
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
