@@ -33,6 +33,7 @@ public class Form_producto extends javax.swing.JPanel {
         trashbutton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         modbutton.setCursor(new Cursor(Cursor.HAND_CURSOR));
         cleanbutton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        invbutton.setCursor(new Cursor(Cursor.HAND_CURSOR));
     }
 
     @SuppressWarnings("unchecked")
@@ -49,6 +50,7 @@ public class Form_producto extends javax.swing.JPanel {
         cleanbutton = new swing.MyButton();
         modbutton = new swing.MyButton();
         datosProducto1 = new general.datosProducto();
+        invbutton = new swing.MyButton();
 
         setBackground(new java.awt.Color(245, 243, 243));
         setForeground(new java.awt.Color(245, 243, 243));
@@ -153,6 +155,16 @@ public class Form_producto extends javax.swing.JPanel {
             }
         });
 
+        invbutton.setBorder(null);
+        invbutton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/inven.png"))); // NOI18N
+        invbutton.setToolTipText("Limpiar");
+        invbutton.setRadius(65);
+        invbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                invbuttonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelBorderModify1Layout = new javax.swing.GroupLayout(panelBorderModify1);
         panelBorderModify1.setLayout(panelBorderModify1Layout);
         panelBorderModify1Layout.setHorizontalGroup(
@@ -171,14 +183,12 @@ public class Form_producto extends javax.swing.JPanel {
                         .addComponent(cleanbutton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(modbutton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(136, 136, 136))
+                .addGap(18, 18, 18)
+                .addComponent(invbutton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(57, 57, 57))
         );
         panelBorderModify1Layout.setVerticalGroup(
             panelBorderModify1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelBorderModify1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(datosProducto1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(12, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelBorderModify1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(panelBorderModify1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -189,6 +199,15 @@ public class Form_producto extends javax.swing.JPanel {
                     .addComponent(cleanbutton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(modbutton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(46, 46, 46))
+            .addGroup(panelBorderModify1Layout.createSequentialGroup()
+                .addGroup(panelBorderModify1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelBorderModify1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(datosProducto1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelBorderModify1Layout.createSequentialGroup()
+                        .addGap(92, 92, 92)
+                        .addComponent(invbutton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -359,11 +378,28 @@ public class Form_producto extends javax.swing.JPanel {
             }else{
                 JOptionPane.showMessageDialog(this, "No ha seleccionado ningun producto de la lista.");
                  }
-            }    
-        
-                
+            }           
     }//GEN-LAST:event_trashbuttonActionPerformed
 
+    private void agregarStock(String s){
+        table.setRowSorter(null);
+        String id = datosProducto1.idField;
+        PreparedStatement ps = null;
+            try {
+                Conexion objCon = new Conexion();
+                Connection conn = objCon.getConexion();
+                String sql = "SELECT Mod_stock("+id+","+s+")";
+                ps = conn.prepareStatement(sql);
+                ps.execute();
+                datosProducto1.limpiar();
+                actualizar();
+                datosProducto1.limpiar();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error al modificar stock.");
+                System.out.println(ex);
+            }  
+    }
+    
     private void tableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableMouseClicked
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -376,7 +412,7 @@ public class Form_producto extends javax.swing.JPanel {
             int Fila = table.getSelectedRow();
             String idPROD = table.getValueAt(Fila, 0).toString();
 
-            String sql = "CALL Mostrar_ProductoID(" + idPROD + ")";;
+            String sql = "CALL Mostrar_ProductoID(" + idPROD + ")";
 
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -393,11 +429,24 @@ public class Form_producto extends javax.swing.JPanel {
         datosProducto1.llenarDatos(id,tipo,costo,sabor);
 
     }//GEN-LAST:event_tableMouseClicked
+
+    private void invbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_invbuttonActionPerformed
+    table.setRowSorter(null);
+        if (!"".equals(datosProducto1.idField.trim())) {
+        agregarStock(JOptionPane.showInputDialog("Ingrese la cantidad de producto en almacen:"));
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "No ha seleccionado ningun producto de la lista.");
+            }
+        
+        
+    }//GEN-LAST:event_invbuttonActionPerformed
     Validar v = new Validar();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private swing.MyButton addbutton;
     private swing.MyButton cleanbutton;
     private general.datosProducto datosProducto1;
+    private swing.MyButton invbutton;
     private javax.swing.JLabel lbValues1;
     private swing.MyButton modbutton;
     private swing.PanelBorder panelBorder1;

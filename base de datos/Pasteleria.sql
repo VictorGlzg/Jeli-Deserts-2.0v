@@ -1,9 +1,9 @@
 -- drop database Pasteleria;
 create database Pasteleria;
 use Pasteleria;
-
 -- SELECT Mod_stock(100, 10);
 -- SELECT * FROM PRODUCTOS;
+-- SELECT * FROM DETALLE
 -- SELECT reducir_stock(100, 50);
 
 create table Cliente
@@ -34,7 +34,7 @@ create table Pedido
     foreign key (id_client) references Cliente(id_client) on delete cascade
 )auto_increment=1500;
 
-create table Detalle_Ped_Prod
+create table Detalle
 (
 	id_detpp int auto_increment primary key,
 	ped_id int,
@@ -44,7 +44,7 @@ create table Detalle_Ped_Prod
     foreign key (ped_id) references Pedido(id) on delete cascade,
     foreign key (prod_id) references Productos(id) on delete cascade
 )auto_increment=200;
-
+-- select * from Detalle where id_detpp = 200
 insert into Cliente (nom_client,correo,dir_client,tel_client,cumpleA) values
 ("[NO REGISTRADO]","","","","1000/01/01"),
 ("Rufo Patino","RufoPatino@jourrapide.com","Cruce Casa de Postas, 981 Fuente Vaqueros",6391122583,"1987/03/7"),
@@ -85,7 +85,7 @@ insert into Pedido (fecha,id_client) values
 ("2022/11/03",506),
 ("2022/06/11",500);
 
-insert into Detalle_Ped_Prod (ped_id,prod_id,adit,cantidad) values
+insert into Detalle (ped_id,prod_id,adit,cantidad) values
 (1500,100,"Extra fresa",3),
 (1501,101,"",5),
 (1502,103,"",10),
@@ -379,7 +379,7 @@ declare message varchar (50);
     end if;    
 return message;
 end // delimiter ;
--- select Baja_Productos(110);
+-- select Baja_Productos(109);
 
 -- Modificaciones a Productos
 
@@ -409,21 +409,21 @@ declare message varchar(50);
 return message;	
 END // delimiter ;
 
-delimiter //
-create function reducir_stock(idprod int, s int) returns varchar(50)
-READS SQL DATA 
-DETERMINISTIC 
+DELIMITER // 
+CREATE PROCEDURE reducir_stock(idprod int, s int)
 BEGIN
-declare message varchar(50);
-	if (exists(select id from Productos where id like idprod and stock > s)) then
+	if (exists(select id from Productos where id like idprod and stock >= s)) then
 		update Productos set stock = stock - s where id = idprod;
-		set message = 'Compra realizada';
-	else
-		set message = 'No hay suficiente stock';
 	end if;
-return message;	
-END // delimiter ;
--- select
+END // DELIMITER ; 
+
+DELIMITER // 
+CREATE PROCEDURE aumentar_stock(idprod int, s int)
+BEGIN
+	if (exists(select id from Productos where id like idprod)) then
+		update Productos set stock = stock + s where id = idprod;
+	end if;
+END // DELIMITER ;
 
 delimiter //
 create function Mod_id_prod(idprod int, newid int) returns varchar(50)
@@ -464,7 +464,7 @@ CREATE PROCEDURE Mostrar_ProductoID(idp int)
 BEGIN
 declare message varchar(20);
 if (exists(select id from Productos where id like idp)) then
-	select id,tipo,sabor,costo from Productos where id = idp; -- IMPORTANTE
+	select * from Productos where id = idp; -- IMPORTANTE
 else
 	set message = 'Producto no encontrado';
 end if;
@@ -483,44 +483,52 @@ BEGIN
 declare message varchar(50);
 	if(exists(select Pedido.id from Pedido where Pedido.id like idped) and 
     exists(select Productos.id from Productos where Productos.id like idprod))then
-		insert into detalle_ped_prod (ped_id, prod_id, cantidad, adit) values
+        insert into Detalle (ped_id, prod_id, cantidad, adit) values
         (idped, idprod, cant, ad);
         set message = "Alta exitosa";
-        -- SELECT Reducir_stock(idprod, cant);
+        CALL Reducir_stock(idprod, cant);
 	else
 		set message = "Alta no realizada";
 	end if;
 return message;
 end // delimiter ;
 -- drop function Alta_Detalle;
--- select Alta_Detalle(1506,103,10);
+-- select Alta_Detalle(1506,103,10,"");
 
 delimiter //
-create function Baja_Detalle(idDetalle int)returns varchar(50)
+create function Baja_Detalle(ids int)returns varchar(50)
 READS SQL DATA 
 DETERMINISTIC 
 BEGIN
 declare message varchar(50);
-	if(exists(select detalle_ped_prod.id_detpp from detalle_ped_prod where
-    detalle_ped_prod.id_detpp like idDetalle))then
-		delete from detalle_ped_prod where id_detpp like idDetalle;
+declare prod int;
+declare cant int;
+set prod = (select id from Detalle join Productos where prod_id = id and id_detpp = ids);
+set cant = (select cantidad from Detalle where id_detpp like ids);
+	if(exists(select id_detpp from Detalle where id_detpp like ids))then
+        delete from Detalle where id_detpp like ids;
         set message = "Baja exitosa";
+        CALL aumentar_stock(prod, cant);
 	else
 		set message = "Baja no realizada";
     end if;
 return message;
-end // delimiter ;
+end // delimiter;
+-- drop function Baja_Detalle;
 -- select Baja_Detalle(200);
+-- delete from Detalle where id_detpp = 200;
+-- select * from Productos
+-- CALL aumentar_stock(100,5)
 
 delimiter //
 create procedure Mostrar_detalles(idped int)
 BEGIN
 declare message varchar(50);
-	if(exists(select detalle_ped_prod.ped_id from detalle_ped_prod where
-    detalle_ped_prod.ped_id like idped))then
+	if(exists(select Detalle.ped_id from Detalle where
+    Detalle.ped_id like idped))then
 		select id_detpp, Productos.tipo, Productos.sabor, cantidad, adit, Productos.costo
-		from detalle_ped_prod join Productos
-		on detalle_ped_prod.prod_id=Productos.id where detalle_ped_prod.ped_id like
+		from Detalle join Productos
+		on Detalle.prod_id=Productos.id where Detalle.ped_id like
         idped;
 	end if;
 end // delimiter ;
@@ -531,11 +539,11 @@ delimiter //
 create procedure Mostrar_detalle(iddet int)
 BEGIN
 declare message varchar(50);
-	if(exists(select detalle_ped_prod.id_detpp from detalle_ped_prod where
-    detalle_ped_prod.id_detpp like iddet))then
+	if(exists(select Detalle.id_detpp from Detalle where
+    Detalle.id_detpp like iddet))then
 		select id_detpp, cantidad, Productos.tipo, Productos.sabor, adit, Productos.costo, Productos.id
-		from detalle_ped_prod join Productos
-		on detalle_ped_prod.prod_id=Productos.id where detalle_ped_prod.id_detpp like
+		from Detalle join Productos
+		on Detalle.prod_id=Productos.id where Detalle.id_detpp like
         iddet;
 	end if;
 end // delimiter ;
@@ -550,12 +558,19 @@ READS SQL DATA
 DETERMINISTIC 
 BEGIN
 declare message varchar(50);
-	if (exists(select id_detpp from detalle_ped_prod where id_detpp like id_det)) then
-		update detalle_ped_prod set cantidad = cant,adit = newaditivo, prod_id = id_prod where id_detpp=id_det;
+declare idp int;
+declare can int;
+set idp = (select prod_id from Detalle where id_detpp like id_det);
+set can = (select cantidad from Detalle where id_detpp like id_det);
+	if (exists(select id_detpp from Detalle where id_detpp like id_det)) then
+		call aumentar_stock(idp, can);
+		update Detalle set cantidad = cant,adit = newaditivo, prod_id = id_prod where id_detpp=id_det;
 		set message = 'Modificación realizada';
+        call reducir_stock(id_prod, cant);
 	end if;
 return message;	
 END // delimiter ;
+-- drop function Mod_detalle;
 
 -- CALCULOS ESTADISTICOS
 /*DELIMITER // 
@@ -572,12 +587,15 @@ END // DELIMITER ;*/
 -- call dineroGanadoxMes();
 -- drop PROCEDURE dineroGanadoxMes();
 
-select * from Pedido join Cliente on Pedido.id_client=Cliente.id_client where month(fecha)=4;
+
+
+
+/*select * from Pedido join Cliente on Pedido.id_client=Cliente.id_client where month(fecha)=4;
 -- select * from Pedido join Cliente on Pedido.id_client=Cliente.id_client where id = idpedido;
 
 -- GASTO DEL MES 4 POR NOMBRE
 select nom_client, costo*cantidad as gasto 
-from Detalle_Ped_Prod 
+from Detalle 
 join Productos on prod_id=Productos.id 
 join Pedido on ped_id=Pedido.id 
 join Cliente on Pedido.id_client=Cliente.id_client
@@ -585,13 +603,13 @@ where month(fecha)=4;
 
 -- PROMEDIO DE VENTAS EN EL MES 4
 select avg(costo*cantidad) as ventas 
-from Detalle_Ped_Prod 
+from Detalle 
 join Productos on prod_id=Productos.id 
 join Pedido on ped_id=Pedido.id 
 where month(fecha)=4;
 -- GASTOS TOTALES DE TODOS LOS TIEMPOS
 select nom_client, costo*cantidad as gasto 
-from Detalle_Ped_Prod 
+from Detalle 
 join Productos on prod_id=Productos.id 
 join Pedido on ped_id=Pedido.id 
-join Cliente on Pedido.id_client=Cliente.id_client;
+join Cliente on Pedido.id_client=Cliente.id_client;*/

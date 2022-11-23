@@ -43,16 +43,17 @@ ImageIcon logo = new ImageIcon(".\\src\\icons\\jeliHD.png");
                      break;
                 case 2:
                     setForm(formprod);
+                    formprod.actualizar();
                     header1.index = 1;
                      break;
                 case 3:
                     setForm(formpedidos);
                     header1.index = 2;
                     break;
-                case 8:
+                case 6:
                     setForm(forminfo);
                      break;
-                case 9:
+                case 7:
                     exit();
                     break;
             }

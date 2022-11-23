@@ -45,6 +45,17 @@ public String idField ="";
         lbValues2.setForeground(new java.awt.Color(120, 21, 22));
         lbValues2.setText("Fecha:");
 
+        fechaField.setEditable(false);
+        fechaField.setForeground(new java.awt.Color(153, 153, 153));
+        fechaField.setText("AAAA-MM-DD");
+        fechaField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                fechaFieldFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                fechaFieldFocusLost(evt);
+            }
+        });
         fechaField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 fechaFieldKeyTyped(evt);
@@ -55,6 +66,7 @@ public String idField ="";
         lbValues.setForeground(new java.awt.Color(120, 21, 22));
         lbValues.setText("Nombre:");
 
+        nombreField.setEditable(false);
         nombreField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 nombreFieldKeyTyped(evt);
@@ -69,12 +81,13 @@ public String idField ="";
 
         lbValues5.setFont(new java.awt.Font("sansserif", 1, 16)); // NOI18N
         lbValues5.setForeground(new java.awt.Color(120, 21, 22));
-        lbValues5.setText("Teléfono:");
+        lbValues5.setText("*Teléfono:");
 
         lbValues4.setFont(new java.awt.Font("sansserif", 1, 16)); // NOI18N
         lbValues4.setForeground(new java.awt.Color(120, 21, 22));
         lbValues4.setText("Cumpleaños:");
 
+        cumpleField.setEditable(false);
         cumpleField.setForeground(new java.awt.Color(153, 153, 153));
         cumpleField.setText("AAAA-MM-DD");
         cumpleField.addFocusListener(new java.awt.event.FocusAdapter() {
@@ -102,45 +115,48 @@ public String idField ="";
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lbValues1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(lbValues2)
-                            .addComponent(lbValues))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(fechaField, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
-                            .addComponent(nombreField))
-                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lbValues4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(cumpleField, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(lbValues2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(fechaField, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(lbValues)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lbValues5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(telefonoField, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(telefonoField, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(lbValues4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(cumpleField, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(lbValues1))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(lbValues1)
-                .addGap(18, 18, 18)
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(fechaField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lbValues2)
                     .addComponent(lbValues5)
-                    .addComponent(telefonoField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(21, 21, 21)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(telefonoField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbValues)
-                    .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(nombreField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 21, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lbValues2)
+                    .addComponent(fechaField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lbValues4)
                     .addComponent(cumpleField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addGap(11, 11, 11))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -181,6 +197,20 @@ public String idField ="";
         cumpleField.setForeground(new Color(0,0,0));
         }
     }//GEN-LAST:event_cumpleFieldFocusGained
+
+    private void fechaFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fechaFieldFocusGained
+    if(fechaField.getText().equals("AAAA-MM-DD")){
+        fechaField.setText("");
+        fechaField.setForeground(new Color(0,0,0));
+        }
+    }//GEN-LAST:event_fechaFieldFocusGained
+
+    private void fechaFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_fechaFieldFocusLost
+    if(fechaField.getText().equals("")){
+        fechaField.setText("AAAA-MM-DD");
+        fechaField.setForeground(new Color(153,153,153));
+        }
+    }//GEN-LAST:event_fechaFieldFocusLost
     
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

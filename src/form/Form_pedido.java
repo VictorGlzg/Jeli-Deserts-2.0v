@@ -373,8 +373,9 @@ public class Form_pedido extends javax.swing.JPanel {
         } catch (SQLException ex) {
             System.out.println(ex.toString());
         }
-        datosPedido1.llenarDatos(IDCLIENT,nombre,fecha,tel_client,fecha2);
+        datosPedido1.llenarDatos(ID,nombre,fecha,tel_client,fecha2);
         datosPedido1.cumpleField.setForeground(new Color(0,0,0));
+        datosPedido1.fechaField.setForeground(new Color(0,0,0));
     }//GEN-LAST:event_tableMouseClicked
 
     private void modbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modbuttonActionPerformed
